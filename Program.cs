@@ -3,10 +3,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(o => {
+    o.AddPolicy("MyPolicy", builder => 
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+    );
+});
 
 builder.Services.AddDbContext<User_solutionContext>(options =>
 {
@@ -22,6 +30,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("MyPolicy");
 
 app.UseAuthorization();
 
